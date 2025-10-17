@@ -1,0 +1,132 @@
+---
+// Simplified advertising visualization that's easy to understand
+export interface Props {
+  className?: string
+}
+
+const { className = '' } = Astro.props
+---
+
+<div class={`simple-ad-visual ${className}`}>
+  <svg viewBox="0 0 600 400" class="w-full h-full">
+    <!-- Title -->
+    <text x="300" y="30" text-anchor="middle" fill="#FCFCFC" font-size="16" font-weight="600" opacity="0.9">
+      Your Ads Reach The Right People
+    </text>
+
+    <!-- Left Side - Your Business -->
+    <g id="business">
+      <!-- Business Icon -->
+      <rect x="50" y="150" width="80" height="80" rx="10" fill="#00B0F1" opacity="0.8">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" />
+      </rect>
+      <text x="90" y="195" text-anchor="middle" fill="#FCFCFC" font-size="24" font-weight="600">$</text>
+      <text x="90" y="260" text-anchor="middle" fill="#FCFCFC" font-size="12" opacity="0.9">Your Budget</text>
+    </g>
+
+    <!-- Center - Our Platform -->
+    <g id="platform">
+      <!-- Central Hub -->
+      <circle cx="300" cy="190" r="40" fill="#FFB231" opacity="0.9">
+        <animate attributeName="r" values="40;45;40" dur="2s" repeatCount="indefinite" />
+      </circle>
+      <text x="300" y="185" text-anchor="middle" fill="#0F0F0F" font-size="12" font-weight="600">Smart</text>
+      <text x="300" y="200" text-anchor="middle" fill="#0F0F0F" font-size="12" font-weight="600">Targeting</text>
+
+      <!-- Optimization Label -->
+      <text x="300" y="260" text-anchor="middle" fill="#FCFCFC" font-size="11" opacity="0.7">Optimizing in Real-Time</text>
+    </g>
+
+    <!-- Right Side - Target Audience -->
+    <g id="audience">
+      <!-- People Icons representing different audiences -->
+      <g transform="translate(470, 120)">
+        <!-- Active Customer -->
+        <circle cx="0" cy="0" r="12" fill="#00B0F1" opacity="1">
+          <animate attributeName="fill" values="#00B0F1;#FFB231;#00B0F1" dur="2s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="0" cy="-5" r="4" fill="#FCFCFC" />
+        <rect x="-5" y="2" width="10" height="8" rx="2" fill="#FCFCFC" />
+        <text x="0" y="25" text-anchor="middle" fill="#00B0F1" font-size="10">Customer</text>
+      </g>
+
+      <g transform="translate(470, 190)">
+        <!-- Interested Person -->
+        <circle cx="0" cy="0" r="12" fill="#FFB231" opacity="0.8">
+          <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" begin="0.5s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="0" cy="-5" r="4" fill="#FCFCFC" />
+        <rect x="-5" y="2" width="10" height="8" rx="2" fill="#FCFCFC" />
+        <text x="0" y="25" text-anchor="middle" fill="#FFB231" font-size="10">Interested</text>
+      </g>
+
+      <g transform="translate(470, 260)">
+        <!-- Not Interested - Faded -->
+        <circle cx="0" cy="0" r="12" fill="#FCFCFC" opacity="0.2" />
+        <circle cx="0" cy="-5" r="4" fill="#FCFCFC" opacity="0.2" />
+        <rect x="-5" y="2" width="10" height="8" rx="2" fill="#FCFCFC" opacity="0.2" />
+        <text x="0" y="25" text-anchor="middle" fill="#FCFCFC" font-size="10" opacity="0.3">Avoided</text>
+      </g>
+    </g>
+
+    <!-- Animated Arrows showing flow -->
+    <g id="flow-arrows">
+      <!-- From Business to Platform -->
+      <path d="M 130 190 L 260 190" stroke="#00B0F1" stroke-width="2" fill="none" stroke-dasharray="5,5">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite" />
+      </path>
+      <polygon points="255,185 265,190 255,195" fill="#00B0F1" />
+
+      <!-- From Platform to Customers -->
+      <path d="M 340 170 L 450 130" stroke="#00B0F1" stroke-width="2" fill="none" stroke-dasharray="5,5">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite" />
+      </path>
+      <polygon points="445,128 455,125 450,135" fill="#00B0F1" />
+
+      <path d="M 340 190 L 450 190" stroke="#FFB231" stroke-width="2" fill="none" stroke-dasharray="5,5">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" begin="0.3s" repeatCount="indefinite" />
+      </path>
+      <polygon points="445,185 455,190 445,195" fill="#FFB231" />
+
+      <!-- Crossed out arrow to "Not Interested" -->
+      <path d="M 340 210 L 450 250" stroke="#FCFCFC" stroke-width="1" fill="none" opacity="0.2" />
+      <line x1="380" y1="225" x2="400" y2="235" stroke="#FF5253" stroke-width="3" opacity="0.5" />
+      <line x1="400" y1="225" x2="380" y2="235" stroke="#FF5253" stroke-width="3" opacity="0.5" />
+    </g>
+
+    <!-- Stats at bottom -->
+    <g id="stats" transform="translate(300, 350)">
+      <rect x="-200" y="-20" width="400" height="40" rx="20" fill="#1A1A1A" opacity="0.5" />
+
+      <text x="-130" y="0" fill="#00B0F1" font-size="11" text-anchor="middle">
+        <tspan font-weight="600">2.4M</tspan>
+        <tspan fill="#FCFCFC" opacity="0.7"> People Analyzed</tspan>
+      </text>
+
+      <text x="0" y="0" fill="#FFB231" font-size="11" text-anchor="middle">
+        <tspan font-weight="600">87%</tspan>
+        <tspan fill="#FCFCFC" opacity="0.7"> More Efficient</tspan>
+      </text>
+
+      <text x="130" y="0" fill="#00B0F1" font-size="11" text-anchor="middle">
+        <tspan font-weight="600">-38%</tspan>
+        <tspan fill="#FCFCFC" opacity="0.7"> Cost Reduction</tspan>
+      </text>
+    </g>
+
+    <!-- Simple labels -->
+    <text x="90" y="290" text-anchor="middle" fill="#FCFCFC" font-size="10" opacity="0.5">You</text>
+    <text x="300" y="290" text-anchor="middle" fill="#FCFCFC" font-size="10" opacity="0.5">Our Platform</text>
+    <text x="470" y="310" text-anchor="middle" fill="#FCFCFC" font-size="10" opacity="0.5">Your Customers</text>
+  </svg>
+</div>
+
+<style>
+  .simple-ad-visual {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

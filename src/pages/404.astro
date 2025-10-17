@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/ui/Button.astro';
+---
+
+<Layout title="Page Not Found">
+  <section class="section min-h-[60vh] flex items-center">
+    <div class="container text-center">
+      <h1 class="text-9xl font-bold text-gray-200 mb-4">404</h1>
+      <h2 class="h2 mb-4">Page Not Found</h2>
+      <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">
+        Sorry, the page you're looking for doesn't exist or has been moved.
+      </p>
+      <Button href="/" variant="primary" size="large">
+        Go Home
+      </Button>
+    </div>
+  </section>
+</Layout>

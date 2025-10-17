@@ -1,0 +1,98 @@
+---
+import { fetchNavigation, fetchAllContent, preferCMS } from '../utils/contentful'
+
+const footerNav = await fetchNavigation('footer')
+const globalSettings = (await fetchAllContent())?.globalSettings
+
+// Default footer structure
+const defaultFooter = {
+  logoText: 'NEXUS',
+  menuItems: [
+    { label: 'Privacy Policy', href: '/privacy', type: 'link' },
+    { label: 'Terms of Service', href: '/terms', type: 'link' },
+    { label: 'Contact', href: '/contact', type: 'link' },
+    { label: 'About', href: '/about', type: 'link' }
+  ]
+}
+
+// Default company info
+const defaultCompanyInfo = {
+  name: 'Nexus Marketing',
+  tagline: 'Stop wasting ad budget. Start seeing results.',
+  email: 'hello@nexusmarketing.com',
+  phone: '1-800-NEXUS-AD'
+}
+
+// Use CMS data or fallback to defaults
+const logoText = preferCMS(footerNav?.logoText, defaultFooter.logoText)
+const menuItems = preferCMS(footerNav?.menuItems, defaultFooter.menuItems)
+const companyInfo = preferCMS(globalSettings?.companyInfo, defaultCompanyInfo)
+const currentYear = new Date().getFullYear()
+---
+
+<footer class="bg-brand-gray/50 border-t border-brand-white/5 mt-32">
+  <div class="luxury-container py-16">
+    <div class="luxury-grid-4">
+      <!-- Company Info -->
+      <div>
+        <div class="flex items-center space-x-2 mb-4">
+          <div class="w-8 h-8 bg-brand-accentBlue rounded-lg"></div>
+          <span class="text-lg font-light">{logoText}</span>
+        </div>
+        <p class="luxury-muted">{companyInfo.tagline}</p>
+      </div>
+
+      <!-- Services -->
+      <div>
+        <h4 class="luxury-caption mb-4">Services</h4>
+        <ul class="space-y-2">
+          <li><a href="#channels" class="luxury-muted hover:text-brand-white transition-colors">Display & Video</a></li>
+          <li><a href="#channels" class="luxury-muted hover:text-brand-white transition-colors">Social Media</a></li>
+          <li><a href="#channels" class="luxury-muted hover:text-brand-white transition-colors">Google & Bing</a></li>
+          <li><a href="#method" class="luxury-muted hover:text-brand-white transition-colors">90-Day Runway</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h4 class="luxury-caption mb-4">Resources</h4>
+        <ul class="space-y-2">
+          <li><a href="#results" class="luxury-muted hover:text-brand-white transition-colors">Case Studies</a></li>
+          <li><a href="#timeline" class="luxury-muted hover:text-brand-white transition-colors">Our Process</a></li>
+          <li><a href="#industries" class="luxury-muted hover:text-brand-white transition-colors">Industries</a></li>
+          <li><a href="#faq" class="luxury-muted hover:text-brand-white transition-colors">FAQ</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal & Contact -->
+      <div>
+        <h4 class="luxury-caption mb-4">Company</h4>
+        <ul class="space-y-2">
+          {menuItems.map((item) => (
+            <li>
+              <a href={item.href} class="luxury-muted hover:text-brand-white transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="luxury-divider my-8"></div>
+
+    <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+      <p class="luxury-muted text-xs">© {currentYear} {companyInfo.name}. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href={`mailto:${companyInfo.email}`} class="luxury-muted text-xs hover:text-brand-white transition-colors">
+          {companyInfo.email}
+        </a>
+        {companyInfo.phone && (
+          <a href={`tel:${companyInfo.phone.replace(/\D/g, '')}`} class="luxury-muted text-xs hover:text-brand-white transition-colors">
+            {companyInfo.phone}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</footer>

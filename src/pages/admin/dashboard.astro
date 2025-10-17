@@ -1,0 +1,106 @@
+---
+// Simple admin dashboard - protect this route in production!
+import Layout from '../../layouts/Layout.astro';
+import DashboardStats from '../../components/dashboard/DashboardStats';
+import QuickActions from '../../components/dashboard/QuickActions';
+import RecentActivity from '../../components/dashboard/RecentActivity';
+import ContentOverview from '../../components/dashboard/ContentOverview';
+
+const siteType = import.meta.env.SITE_TYPE || 'business';
+
+// In production, add authentication check here
+// if (!user.isAdmin) return redirect('/login');
+---
+
+<Layout title="Dashboard">
+  <div class="dashboard min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+      <div class="px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">
+              {siteType === 'church' ? 'Church Dashboard' : 'Business Dashboard'}
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+              Welcome back! Here's what's happening today.
+            </p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="text-sm text-gray-500">
+              Last updated: {new Date().toLocaleTimeString()}
+            </span>
+            <button
+              onclick="window.location.reload()"
+              class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Stats Grid -->
+      <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Overview</h2>
+        <DashboardStats client:load siteType={siteType} />
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+        <QuickActions client:load siteType={siteType} />
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Recent Activity -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
+          <RecentActivity client:load siteType={siteType} />
+        </div>
+
+        <!-- Content Overview -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Content Overview</h2>
+          <ContentOverview client:load siteType={siteType} />
+        </div>
+      </div>
+
+      <!-- Help Section -->
+      <div class="mt-12 bg-blue-50 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-blue-900 mb-2">Need Help?</h3>
+        <p class="text-blue-700 mb-4">
+          {siteType === 'church'
+            ? 'Manage your sermons, events, and member communications from one place.'
+            : 'Track leads, manage content, and monitor your business growth.'
+          }
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a
+            href="https://app.contentful.com"
+            target="_blank"
+            class="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+          >
+            Edit Content →
+          </a>
+          <a
+            href="/admin/help"
+            class="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+          >
+            View Guide →
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    .dashboard {
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+  </style>
+</Layout>

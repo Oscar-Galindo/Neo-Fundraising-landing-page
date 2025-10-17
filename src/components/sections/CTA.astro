@@ -1,0 +1,61 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  primaryButton?: {
+    label: string;
+    href: string;
+  };
+  secondaryButton?: {
+    label: string;
+    href: string;
+  };
+  backgroundColor?: string;
+}
+
+const {
+  title,
+  description,
+  primaryButton,
+  secondaryButton,
+  backgroundColor = 'primary'
+} = Astro.props;
+
+const bgClasses = {
+  primary: 'bg-primary-600',
+  secondary: 'bg-secondary-600',
+  dark: 'bg-gray-900',
+  gradient: 'bg-gradient-to-r from-primary-600 to-secondary-600'
+};
+---
+
+<section class={`py-16 ${bgClasses[backgroundColor] || bgClasses.primary}`}>
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+      {title}
+    </h2>
+    {description && (
+      <p class="text-lg text-white/90 max-w-2xl mx-auto mb-8">
+        {description}
+      </p>
+    )}
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      {primaryButton && (
+        <a
+          href={primaryButton.href}
+          class="px-8 py-3 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          {primaryButton.label}
+        </a>
+      )}
+      {secondaryButton && (
+        <a
+          href={secondaryButton.href}
+          class="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+        >
+          {secondaryButton.label}
+        </a>
+      )}
+    </div>
+  </div>
+</section>

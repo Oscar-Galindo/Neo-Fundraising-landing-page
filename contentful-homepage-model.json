@@ -1,0 +1,304 @@
+{
+  "contentTypes": [
+    {
+      "sys": {
+        "id": "homepageContent",
+        "type": "ContentType"
+      },
+      "displayField": "sectionName",
+      "name": "Homepage Content",
+      "description": "All homepage content sections",
+      "fields": [
+        {
+          "id": "sectionName",
+          "name": "Section Name",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "validations": [
+            {
+              "in": [
+                "hero",
+                "urgencyBanner",
+                "channels",
+                "method",
+                "timeline",
+                "results",
+                "industries",
+                "integration",
+                "primaryCTA",
+                "faq"
+              ]
+            }
+          ],
+          "helpText": "Which section this content is for"
+        },
+        {
+          "id": "headline",
+          "name": "Headline",
+          "type": "Symbol",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "size": {
+                "max": 200
+              }
+            }
+          ]
+        },
+        {
+          "id": "subheadline",
+          "name": "Subheadline",
+          "type": "Text",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "size": {
+                "max": 500
+              }
+            }
+          ]
+        },
+        {
+          "id": "disclaimer",
+          "name": "Disclaimer/Caption",
+          "type": "Symbol",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "size": {
+                "max": 200
+              }
+            }
+          ]
+        },
+        {
+          "id": "items",
+          "name": "Section Items (JSON)",
+          "type": "Object",
+          "required": false,
+          "localized": false,
+          "helpText": "Store channel cards, method steps, FAQs, stats, etc as JSON array"
+        },
+        {
+          "id": "ctaText",
+          "name": "CTA Button Text",
+          "type": "Symbol",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "size": {
+                "max": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "linkType": "Asset",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": ["image"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "globalSettings",
+        "type": "ContentType"
+      },
+      "displayField": "siteName",
+      "name": "Global Settings",
+      "description": "Site-wide settings and brand config",
+      "fields": [
+        {
+          "id": "siteName",
+          "name": "Site Name",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "defaultValue": "NEXUS"
+        },
+        {
+          "id": "brandColors",
+          "name": "Brand Colors (JSON)",
+          "type": "Object",
+          "required": false,
+          "localized": false,
+          "helpText": "Example: {\"primary\": \"#00B0F1\", \"secondary\": \"#FFB231\", \"accent\": \"#FF5253\"}"
+        },
+        {
+          "id": "companyInfo",
+          "name": "Company Info (JSON)",
+          "type": "Object",
+          "required": false,
+          "localized": false,
+          "helpText": "Contact details, social links, addresses, etc"
+        },
+        {
+          "id": "trackingCodes",
+          "name": "Tracking Codes",
+          "type": "Text",
+          "required": false,
+          "localized": false,
+          "helpText": "Google Analytics, Facebook Pixel, etc"
+        }
+      ]
+    }
+  ],
+  "sampleEntries": {
+    "hero": {
+      "sectionName": "hero",
+      "headline": "Stop Wasting Half Your Ad Budget on the Wrong People",
+      "subheadline": "Get clear visibility into what's working and what's not. We provide detailed performance reports at 30, 60, and 90 day checkpoints so you know exactly where to invest.",
+      "disclaimer": "Transparent reporting • Data-driven decisions • Clear ROI tracking"
+    },
+    "urgencyBanner": {
+      "sectionName": "urgencyBanner",
+      "headline": "Limited Q1 Spots: Only 3 partnerships available for January"
+    },
+    "channels": {
+      "sectionName": "channels",
+      "headline": "The Right Channel for the Job",
+      "items": [
+        {
+          "title": "Display & Video",
+          "description": "Reach customers on 2M+ premium websites and streaming services",
+          "icon": "tv"
+        },
+        {
+          "title": "Social Media",
+          "description": "Target your exact audience on Facebook, Instagram, LinkedIn & TikTok",
+          "icon": "users"
+        },
+        {
+          "title": "Google & Bing",
+          "description": "Capture high-intent customers actively searching for your services",
+          "icon": "search"
+        }
+      ]
+    },
+    "method": {
+      "sectionName": "method",
+      "headline": "Our Method",
+      "items": [
+        {
+          "timeline": "30 Days",
+          "title": "Analyze & Optimize",
+          "description": "Establish baseline and identify opportunities"
+        },
+        {
+          "timeline": "60 Days",
+          "title": "Test & Improve",
+          "description": "Run tests and optimize winning strategies"
+        },
+        {
+          "timeline": "90 Days",
+          "title": "Scale Winners",
+          "description": "Scale what works and document playbook"
+        }
+      ]
+    },
+    "results": {
+      "sectionName": "results",
+      "headline": "Proof in Performance",
+      "items": [
+        {
+          "label": "Display CPL",
+          "value": "−24 to −38%",
+          "subtext": "by day 60"
+        },
+        {
+          "label": "CTV Conversions",
+          "value": "2.8× to 3.4×",
+          "subtext": "q over q"
+        },
+        {
+          "label": "Retargeting QLR",
+          "value": "+31 to +54%",
+          "subtext": "after testing"
+        },
+        {
+          "label": "Social QLR",
+          "value": "+22 to +41%",
+          "subtext": "after rounds"
+        }
+      ]
+    },
+    "industries": {
+      "sectionName": "industries",
+      "headline": "Industries We Serve",
+      "subheadline": "Proven success across diverse industries with tailored strategies for each vertical",
+      "items": [
+        "SaaS",
+        "Healthcare",
+        "Finance",
+        "Real Estate",
+        "Retail",
+        "Education"
+      ]
+    },
+    "integration": {
+      "sectionName": "integration",
+      "headline": "Seamless Integration With Your Existing Tools",
+      "subheadline": "We don't replace your systems—we enhance them. Our platform connects with your current CRM and marketing stack to provide unified reporting.",
+      "items": [
+        {
+          "title": "CRM Integration",
+          "description": "Works with Salesforce, HubSpot, Pipedrive, or any CRM you use"
+        },
+        {
+          "title": "Real-Time Reporting",
+          "description": "Live dashboards showing exactly where your budget is going"
+        },
+        {
+          "title": "Lead Tracking",
+          "description": "See which ads drive real revenue, not just clicks"
+        },
+        {
+          "title": "Custom Analytics",
+          "description": "Reports tailored to your KPIs and business goals"
+        }
+      ]
+    },
+    "primaryCTA": {
+      "sectionName": "primaryCTA",
+      "headline": "A 90 day runway designed to prove or improve return",
+      "subheadline": "Clarity by day 30 traction by day 60 scale by day 90",
+      "ctaText": "Get Your Performance Analysis →",
+      "disclaimer": "See how your campaigns could perform better"
+    },
+    "faq": {
+      "sectionName": "faq",
+      "headline": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "Why 90 days?",
+          "answer": "90 days provides enough time to establish baselines, run statistically significant tests, and scale winners while maintaining budget discipline."
+        },
+        {
+          "question": "What happens at 30 60 90?",
+          "answer": "Day 30: Performance baseline established. Day 60: Winners identified and optimized. Day 90: Scaled campaigns with documented playbook."
+        },
+        {
+          "question": "Do you manage social ads?",
+          "answer": "Yes, through our partnership with North American Advertising, we handle Meta, LinkedIn, and TikTok with rapid creative testing."
+        },
+        {
+          "question": "Brand safety and fraud prevention?",
+          "answer": "We implement pre-bid fraud detection, brand safety filters, and viewability standards from day one across all campaigns."
+        }
+      ]
+    }
+  }
+}

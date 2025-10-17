@@ -1,0 +1,168 @@
+---
+import { fetchNavigation, preferCMS } from '../utils/contentful'
+import { getCloudinaryFetchUrl } from '../utils/cloudinary'
+
+const navData = await fetchNavigation('main')
+
+// Default navigation structure
+const defaultNav = {
+  logoText: 'NEXUS',
+  menuItems: [
+    { label: 'How It Works', href: '#method', type: 'scroll' },
+    { label: '90-Day Timeline', href: '#timeline', type: 'scroll' },
+    { label: 'Results', href: '#results', type: 'scroll' },
+    { label: 'Industries', href: '#industries', type: 'scroll' },
+    { label: 'FAQ', href: '#faq', type: 'scroll' }
+  ],
+  ctaButton: {
+    text: 'Get Started',
+    href: '#intent-bar-container',
+    style: 'primary'
+  }
+}
+
+// Use CMS data or fallback to defaults
+const logoText = preferCMS(navData?.logoText, defaultNav.logoText)
+const logoUrl = navData?.logoUrl ? getCloudinaryFetchUrl(navData.logoUrl, { width: 200, height: 50, quality: 90 }) : null
+
+// Handle logo asset - Contentful URLs start with // so we need to add https:
+let logoAsset = null
+if (navData?.logo?.fields?.file?.url) {
+  const assetUrl = navData.logo.fields.file.url.startsWith('//')
+    ? `https:${navData.logo.fields.file.url}`
+    : navData.logo.fields.file.url
+  // Much larger size for better visibility
+  logoAsset = getCloudinaryFetchUrl(assetUrl, { width: 700, height: 175, quality: 90, crop: 'fit' })
+}
+
+const menuItems = preferCMS(navData?.menuItems, defaultNav.menuItems)
+const ctaButton = preferCMS(navData?.ctaButton, defaultNav.ctaButton)
+
+const finalLogo = logoAsset || logoUrl
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-brand-black/95 backdrop-blur-lg border-b border-brand-white/10">
+  <div class="luxury-container">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="/" class="flex items-center">
+        {finalLogo ? (
+          <img src={finalLogo} alt={logoText} class="h-16 w-auto object-contain max-w-[700px]" />
+        ) : (
+          <span class="text-2xl font-bold bg-gradient-to-r from-brand-accentBlue via-brand-accentOrange to-brand-accentRed bg-clip-text text-transparent">
+            {logoText}
+          </span>
+        )}
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden lg:flex items-center gap-8">
+        {menuItems.map((item) => (
+          <a
+            href={item.href}
+            class="text-brand-white/80 hover:text-brand-accentBlue transition-colors text-sm font-medium"
+            data-type={item.type}
+          >
+            {item.label}
+          </a>
+        ))}
+
+        {ctaButton && (
+          <a
+            href={ctaButton.href}
+            class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-brand-accentOrange to-brand-accentRed text-brand-white font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-accentOrange/40 transition-all duration-300 transform hover:scale-105 text-sm"
+            data-type={ctaButton.type || 'scroll'}
+          >
+            {ctaButton.text}
+            <span class="i-heroicons-arrow-right ml-2"></span>
+          </a>
+        )}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-toggle"
+        class="lg:hidden text-brand-white/80 hover:text-brand-white"
+        aria-label="Toggle menu"
+      >
+        <span class="i-heroicons-bars-3 text-2xl"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-brand-black/95 backdrop-blur-lg border-t border-brand-white/10">
+    <div class="luxury-container py-6 space-y-4">
+      {menuItems.map((item) => (
+        <a
+          href={item.href}
+          class="block text-brand-white/80 hover:text-brand-accentBlue transition-colors text-base font-medium py-2"
+          data-type={item.type}
+        >
+          {item.label}
+        </a>
+      ))}
+
+      {ctaButton && (
+        <a
+          href={ctaButton.href}
+          class="block w-full px-6 py-3 bg-gradient-to-r from-brand-accentOrange to-brand-accentRed text-brand-white font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-accentOrange/40 transition-all duration-300 text-center text-base mt-6"
+          data-type={ctaButton.type || 'scroll'}
+        >
+          {ctaButton.text}
+          <span class="i-heroicons-arrow-right ml-2 inline-block"></span>
+        </a>
+      )}
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Mobile menu toggle
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  mobileMenuToggle?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('nav a[data-type="scroll"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // Close mobile menu if open
+          mobileMenu?.classList.add('hidden');
+        }
+      }
+    });
+  });
+
+  // Add scroll effect to nav
+  let lastScroll = 0;
+  const nav = document.querySelector('nav');
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll > 100) {
+      nav?.classList.add('bg-brand-black', 'shadow-lg');
+      nav?.classList.remove('bg-brand-black/95');
+    } else {
+      nav?.classList.add('bg-brand-black/95');
+      nav?.classList.remove('bg-brand-black', 'shadow-lg');
+    }
+
+    lastScroll = currentScroll;
+  });
+</script>
+
+<style>
+  nav {
+    transition: all 0.3s ease;
+  }
+</style>

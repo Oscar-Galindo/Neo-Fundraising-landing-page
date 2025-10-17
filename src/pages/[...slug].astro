@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionRenderer from '../components/SectionRenderer.astro';
+import { getPage, optimizeContentfulImage } from '../lib/api/contentful';
+import { getStaticPagePaths } from '../lib/api/pages';
+
+// For static generation
+export async function getStaticPaths() {
+  return await getStaticPagePaths();
+}
+
+// Get the slug from the URL
+const { slug } = Astro.params;
+
+// Fetch page from Contentful
+// For homepage, use 'home' as slug
+const pageSlug = slug || 'home';
+const page = await getPage(pageSlug);
+
+// If no page found, return 404
+if (!page) {
+  return Astro.redirect('/404');
+}
+
+// Get sections to render
+const sections = page.sections || [];
+---
+
+<Layout
+  title={page.seo?.metaTitle || page.title}
+  description={page.seo?.metaDescription}
+  image={page.seo?.openGraphImage ? optimizeContentfulImage(page.seo.openGraphImage) : undefined}
+  noindex={page.seo?.noIndex}
+>
+  {sections.map((section) => (
+    <SectionRenderer section={section} />
+  ))}
+
+  {/* Fallback content if no sections */}
+  {sections.length === 0 && (
+    <div class="container section">
+      <h1 class="h1">{page.title}</h1>
+      <p class="text-lg text-gray-600 mt-4">
+        This page doesn't have any sections yet. Add sections in Contentful to build your page.
+      </p>
+    </div>
+  )}
+</Layout>

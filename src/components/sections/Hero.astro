@@ -1,0 +1,98 @@
+---
+import { optimizeContentfulImage } from '../../lib/api/contentful';
+import type { HeroSection } from '../../lib/api/contentful';
+import Button from '../ui/Button.astro';
+
+export interface Props extends HeroSection {
+  // Allow overrides if needed
+  class?: string;
+}
+
+const {
+  variant = 'center',
+  title,
+  subtitle,
+  description,
+  backgroundImage,
+  primaryCTA,
+  secondaryCTA,
+  overlay = true,
+  height = 'large',
+  class: className = '',
+} = Astro.props;
+
+const heightClasses = {
+  full: 'min-h-screen',
+  large: 'min-h-[80vh]',
+  medium: 'min-h-[60vh]',
+};
+
+const alignmentClasses = {
+  center: 'text-center items-center',
+  left: 'text-left items-start',
+  right: 'text-right items-end',
+};
+
+// Optimize background image if exists
+const bgImage = backgroundImage ? optimizeContentfulImage(backgroundImage, { width: 1920, quality: 85 }) : undefined;
+---
+
+<section
+  class={`relative section ${heightClasses[height]} flex items-center ${className}`}
+  style={bgImage ? `background-image: url('${bgImage}')` : ''}
+>
+  {bgImage && overlay && (
+    <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+  )}
+
+  <div class="container relative z-10">
+    <div class={`max-w-4xl ${variant === 'center' ? 'mx-auto' : ''} flex flex-col gap-6 ${alignmentClasses[variant]}`}>
+      {subtitle && (
+        <span class="text-primary-400 font-medium uppercase tracking-wider text-sm">
+          {subtitle}
+        </span>
+      )}
+
+      <h1 class={`h1 ${bgImage ? 'text-white' : 'text-gray-900'}`}>
+        {title}
+      </h1>
+
+      {description && (
+        <p class={`text-lg md:text-xl ${bgImage ? 'text-gray-100' : 'text-gray-600'} max-w-2xl`}>
+          {description}
+        </p>
+      )}
+
+      {(primaryCTA || secondaryCTA) && (
+        <div class={`flex gap-4 mt-4 ${variant === 'center' ? 'justify-center' : variant === 'right' ? 'justify-end' : ''}`}>
+          {primaryCTA && (
+            <Button
+              href={primaryCTA.href}
+              variant="primary"
+              size="large"
+              target={primaryCTA.openInNewTab ? '_blank' : undefined}
+            >
+              {primaryCTA.label}
+            </Button>
+          )}
+          {secondaryCTA && (
+            <Button
+              href={secondaryCTA.href}
+              variant={bgImage ? 'white' : 'secondary'}
+              size="large"
+              target={secondaryCTA.openInNewTab ? '_blank' : undefined}
+            >
+              {secondaryCTA.label}
+            </Button>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  section[style*="background-image"] {
+    @apply bg-cover bg-center bg-no-repeat;
+  }
+</style>

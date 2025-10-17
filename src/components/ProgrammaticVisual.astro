@@ -1,0 +1,162 @@
+---
+// Large programmatic advertising visualization for Hero
+export interface Props {
+  className?: string
+}
+
+const { className = '' } = Astro.props
+---
+
+<div class={`programmatic-visual ${className}`}>
+  <svg viewBox="0 0 600 500" class="w-full h-full">
+    <!-- Grid background -->
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#FCFCFC" stroke-width="0.5" opacity="0.05"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+
+    <!-- Central Hub (DSP) -->
+    <circle cx="300" cy="250" r="25" fill="#00B0F1" opacity="0.9">
+      <animate attributeName="r" values="25;30;25" dur="3s" repeatCount="indefinite" />
+    </circle>
+    <text x="300" y="255" text-anchor="middle" fill="#FCFCFC" font-size="12" font-weight="600">DSP</text>
+
+    <!-- Ad Exchanges (surrounding nodes) -->
+    <g id="exchanges">
+      <!-- Top Exchange -->
+      <circle cx="300" cy="100" r="15" fill="#FFB231" opacity="0.8">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+      </circle>
+      <text x="300" y="105" text-anchor="middle" fill="#FCFCFC" font-size="10">Exchange</text>
+
+      <!-- Right Exchange -->
+      <circle cx="450" cy="250" r="15" fill="#FFB231" opacity="0.8">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" begin="0.5s" repeatCount="indefinite" />
+      </circle>
+      <text x="450" y="255" text-anchor="middle" fill="#FCFCFC" font-size="10">SSP</text>
+
+      <!-- Bottom Exchange -->
+      <circle cx="300" cy="400" r="15" fill="#FFB231" opacity="0.8">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" begin="1s" repeatCount="indefinite" />
+      </circle>
+      <text x="300" y="405" text-anchor="middle" fill="#FCFCFC" font-size="10">Network</text>
+
+      <!-- Left Exchange -->
+      <circle cx="150" cy="250" r="15" fill="#FFB231" opacity="0.8">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" begin="1.5s" repeatCount="indefinite" />
+      </circle>
+      <text x="150" y="255" text-anchor="middle" fill="#FCFCFC" font-size="10">PMP</text>
+    </g>
+
+    <!-- Publishers (outer ring) -->
+    <g id="publishers">
+      <!-- Multiple publisher nodes -->
+      <circle cx="200" cy="120" r="8" fill="#FF5253" opacity="0.6" />
+      <circle cx="400" cy="120" r="8" fill="#FF5253" opacity="0.6" />
+      <circle cx="480" cy="200" r="8" fill="#FF5253" opacity="0.6" />
+      <circle cx="480" cy="300" r="8" fill="#FF5253" opacity="0.6" />
+      <circle cx="400" cy="380" r="8" fill="#FF5253" opacity="0.6" />
+      <circle cx="200" cy="380" r="8" fill="#FF5253" opacity="0.6" />
+      <circle cx="120" cy="300" r="8" fill="#FF5253" opacity="0.6" />
+      <circle cx="120" cy="200" r="8" fill="#FF5253" opacity="0.6" />
+    </g>
+
+    <!-- Data flow lines (animated) -->
+    <g id="dataflow" stroke-dasharray="5,5">
+      <!-- From DSP to Exchanges -->
+      <line x1="300" y1="250" x2="300" y2="100" stroke="#00B0F1" stroke-width="2" opacity="0.4">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite" />
+      </line>
+      <line x1="300" y1="250" x2="450" y2="250" stroke="#00B0F1" stroke-width="2" opacity="0.4">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite" />
+      </line>
+      <line x1="300" y1="250" x2="300" y2="400" stroke="#00B0F1" stroke-width="2" opacity="0.4">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite" />
+      </line>
+      <line x1="300" y1="250" x2="150" y2="250" stroke="#00B0F1" stroke-width="2" opacity="0.4">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite" />
+      </line>
+
+      <!-- From Exchanges to Publishers -->
+      <line x1="300" y1="100" x2="200" y2="120" stroke="#FFB231" stroke-width="1" opacity="0.3">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite" />
+      </line>
+      <line x1="300" y1="100" x2="400" y2="120" stroke="#FFB231" stroke-width="1" opacity="0.3">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite" />
+      </line>
+      <line x1="450" y1="250" x2="480" y2="200" stroke="#FFB231" stroke-width="1" opacity="0.3">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite" />
+      </line>
+      <line x1="450" y1="250" x2="480" y2="300" stroke="#FFB231" stroke-width="1" opacity="0.3">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite" />
+      </line>
+    </g>
+
+    <!-- Bid Request Particles -->
+    <g id="particles">
+      <!-- Animated particles moving through the system -->
+      <circle r="3" fill="#00B0F1" opacity="0.8">
+        <animateMotion dur="3s" repeatCount="indefinite">
+          <mpath href="#path1" />
+        </animateMotion>
+      </circle>
+      <circle r="3" fill="#FFB231" opacity="0.8">
+        <animateMotion dur="3s" begin="1s" repeatCount="indefinite">
+          <mpath href="#path2" />
+        </animateMotion>
+      </circle>
+      <circle r="3" fill="#00B0F1" opacity="0.8">
+        <animateMotion dur="3s" begin="2s" repeatCount="indefinite">
+          <mpath href="#path3" />
+        </animateMotion>
+      </circle>
+    </g>
+
+    <!-- Paths for particle animation -->
+    <path id="path1" d="M300,250 L300,100 L200,120" fill="none" />
+    <path id="path2" d="M300,250 L450,250 L480,200" fill="none" />
+    <path id="path3" d="M300,250 L150,250 L120,200" fill="none" />
+
+    <!-- Labels -->
+    <text x="300" y="30" text-anchor="middle" fill="#FCFCFC" font-size="14" font-weight="600" opacity="0.7">
+      Real-Time Bidding Ecosystem
+    </text>
+
+    <!-- Metrics Display -->
+    <g id="metrics" transform="translate(50, 450)">
+      <text x="0" y="0" fill="#00B0F1" font-size="12" opacity="0.8">
+        <tspan>Bid Requests: </tspan>
+        <tspan fill="#FCFCFC">
+          <animate attributeName="fill" values="#FCFCFC;#00B0F1;#FCFCFC" dur="2s" repeatCount="indefinite" />
+          2.4M/sec
+        </tspan>
+      </text>
+      <text x="200" y="0" fill="#FFB231" font-size="12" opacity="0.8">
+        <tspan>Win Rate: </tspan>
+        <tspan fill="#FCFCFC">
+          <animate attributeName="fill" values="#FCFCFC;#FFB231;#FCFCFC" dur="2s" begin="0.5s" repeatCount="indefinite" />
+          12.3%
+        </tspan>
+      </text>
+      <text x="400" y="0" fill="#FF5253" font-size="12" opacity="0.8">
+        <tspan>CPM: </tspan>
+        <tspan fill="#FCFCFC">
+          <animate attributeName="fill" values="#FCFCFC;#FF5253;#FCFCFC" dur="2s" begin="1s" repeatCount="indefinite" />
+          $3.42
+        </tspan>
+      </text>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .programmatic-visual {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

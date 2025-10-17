@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cdn, optimizeImage } from '../lib/utils/cloudinary';
+
+// Test with a sample image URL
+const testImageUrl = 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=3000';
+
+// Different optimization examples
+const examples = [
+  {
+    title: 'Original (Unoptimized)',
+    url: testImageUrl,
+    description: 'Direct from source - Large file size'
+  },
+  {
+    title: 'Hero Image',
+    url: cdn.hero(testImageUrl),
+    description: 'Optimized for hero sections (1920px, quality 85)'
+  },
+  {
+    title: 'Thumbnail',
+    url: cdn.thumbnail(testImageUrl),
+    description: 'Small thumbnail (400x300px, cropped)'
+  },
+  {
+    title: 'Avatar',
+    url: cdn.avatar(testImageUrl),
+    description: 'Round avatar (200x200px, face detection)'
+  },
+  {
+    title: 'Gallery',
+    url: cdn.gallery(testImageUrl),
+    description: 'Gallery size (800px, quality 80)'
+  },
+  {
+    title: 'Background Blur',
+    url: cdn.background(testImageUrl),
+    description: 'Blurred for backgrounds (1920px, blur effect)'
+  }
+];
+---
+
+<Layout title="Cloudinary Image Optimization Test">
+  <div class="container py-12">
+    <h1 class="h1 text-center mb-12">Cloudinary Fetch Mode Test</h1>
+
+    <div class="bg-green-100 border-2 border-green-500 rounded-lg p-6 mb-12">
+      <h2 class="text-xl font-bold text-green-800 mb-2">✅ Cloudinary Connected!</h2>
+      <p class="text-green-700">
+        Cloud Name: <code class="bg-green-200 px-2 py-1 rounded">dkfdw5oxf</code>
+      </p>
+      <p class="text-sm text-green-600 mt-2">
+        All images below are automatically optimized through Cloudinary Fetch Mode.
+        Original 3000px image is transformed on-the-fly to different sizes and formats.
+      </p>
+    </div>
+
+    <div class="grid gap-8">
+      {examples.map((example) => (
+        <div class="card">
+          <h3 class="text-xl font-bold mb-2">{example.title}</h3>
+          <p class="text-sm text-gray-600 mb-4">{example.description}</p>
+
+          <div class="relative">
+            <img
+              src={example.url}
+              alt={example.title}
+              loading="lazy"
+              class="w-full h-auto rounded-lg"
+            />
+          </div>
+
+          <div class="mt-4 p-3 bg-gray-100 rounded-lg">
+            <p class="text-xs font-mono break-all text-gray-700">
+              {example.url}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 p-6 bg-blue-50 rounded-lg">
+      <h3 class="text-lg font-bold mb-3">How It Works:</h3>
+      <ol class="list-decimal list-inside space-y-2 text-sm">
+        <li>User uploads image to Contentful (or any source)</li>
+        <li>Your code wraps the URL with Cloudinary Fetch Mode</li>
+        <li>Cloudinary fetches, caches, and optimizes the image</li>
+        <li>Visitors get WebP/AVIF format with optimal quality</li>
+        <li>All transformations happen automatically!</li>
+      </ol>
+    </div>
+  </div>
+</Layout>

@@ -1,16 +1,73 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/sections/Hero.astro';
+import { getPage, getSiteSettings } from '../lib/api/contentful';
 
+// Fetch page data from Contentful
+const page = await getPage('home');
+const settings = await getSiteSettings();
+
+// Use mock data if Contentful is not configured yet
+const heroData = page?.sections?.find(s => s.fields.contentType === 'heroSection')?.fields || {
+  title: 'Welcome to Your New Site',
+  subtitle: 'Church & Business Starter Kit',
+  description: 'A modern, flexible website starter that adapts to your needs. Perfect for churches and small businesses.',
+  primaryCTA: {
+    label: 'Get Started',
+    href: '/contact',
+  },
+  secondaryCTA: {
+    label: 'Learn More',
+    href: '/about',
+  },
+  variant: 'center',
+  height: 'large',
+  // Mock background image from Unsplash
+  backgroundImage: {
+    fields: {
+      file: {
+        url: 'https://images.unsplash.com/photo-1478147427282-58a87a120781?w=1920',
+      },
+    },
+  },
+};
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title={page?.seo?.metaTitle || 'Home'}>
+  <Hero {...heroData} />
+
+  <!-- Additional sections will be added here -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="h2 mb-6">Flexible & Powerful</h2>
+        <p class="text-lg text-gray-600">
+          This starter kit includes everything you need:
+        </p>
+        <div class="grid md:grid-cols-3 gap-8 mt-12">
+          <div class="card">
+            <div class="text-4xl mb-4">🚀</div>
+            <h3 class="text-xl font-bold mb-2">Fast Performance</h3>
+            <p class="text-gray-600">
+              Built with Astro for lightning-fast load times and excellent SEO.
+            </p>
+          </div>
+          <div class="card">
+            <div class="text-4xl mb-4">🎨</div>
+            <h3 class="text-xl font-bold mb-2">Easy to Customize</h3>
+            <p class="text-gray-600">
+              Contentful CMS makes it simple to update content without coding.
+            </p>
+          </div>
+          <div class="card">
+            <div class="text-4xl mb-4">📱</div>
+            <h3 class="text-xl font-bold mb-2">Mobile Ready</h3>
+            <p class="text-gray-600">
+              Responsive design that looks great on all devices.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

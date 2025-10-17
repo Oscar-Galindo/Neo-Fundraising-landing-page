@@ -1,0 +1,86 @@
+---
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  posts?: Array<{
+    title: string;
+    excerpt?: string;
+    slug: string;
+    publishDate?: string;
+    author?: string;
+    featuredImage?: any;
+  }>;
+  showViewAll?: boolean;
+}
+
+const { title, subtitle, posts = [], showViewAll = true } = Astro.props;
+---
+
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    {(title || subtitle) && (
+      <div class="text-center mb-12">
+        {title && (
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {title}
+          </h2>
+        )}
+        {subtitle && (
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            {subtitle}
+          </p>
+        )}
+      </div>
+    )}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {posts.map((post) => (
+        <article class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+          {post.featuredImage && (
+            <img
+              src={post.featuredImage}
+              alt={post.title}
+              class="w-full h-48 object-cover"
+            />
+          )}
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              <a href={`/blog/${post.slug}`} class="hover:text-primary-600">
+                {post.title}
+              </a>
+            </h3>
+            {post.excerpt && (
+              <p class="text-gray-600 mb-4 line-clamp-3">
+                {post.excerpt}
+              </p>
+            )}
+            <div class="flex items-center justify-between text-sm text-gray-500">
+              {post.publishDate && (
+                <time datetime={post.publishDate}>
+                  {new Date(post.publishDate).toLocaleDateString()}
+                </time>
+              )}
+              {post.author && (
+                <span>By {post.author}</span>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    {showViewAll && (
+      <div class="text-center mt-12">
+        <a
+          href="/blog"
+          class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+        >
+          View All Posts
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
+    )}
+  </div>
+</section>

@@ -1,0 +1,44 @@
+---
+import Hero from './sections/Hero.astro';
+import Features from './sections/Features.astro';
+import Events from './sections/Events.astro';
+import TeamGrid from './sections/TeamGrid.astro';
+import Testimonials from './sections/Testimonials.astro';
+import Services from './sections/Services.astro';
+import CTA from './sections/CTA.astro';
+import BlogPosts from './sections/BlogPosts.astro';
+
+export interface Props {
+  section: any;
+}
+
+const { section } = Astro.props;
+
+// Map content types to components
+const componentMap: Record<string, any> = {
+  'heroSection': Hero,
+  'featuresSection': Features,
+  'eventsSection': Events,
+  'teamSection': TeamGrid,
+  'testimonialsSection': Testimonials,
+  'servicesSection': Services,
+  'ctaSection': CTA,
+  'blogSection': BlogPosts,
+};
+
+// Get the content type
+const contentType = section.sys?.contentType?.sys?.id;
+const Component = componentMap[contentType];
+---
+
+{Component ? (
+  <Component {...section.fields} />
+) : (
+  <div class="section bg-gray-100">
+    <div class="container">
+      <p class="text-center text-gray-600">
+        Section type "{contentType}" is not yet implemented
+      </p>
+    </div>
+  </div>
+)}

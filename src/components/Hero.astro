@@ -1,0 +1,106 @@
+---
+import { preferCMS } from '../utils/contentful'
+import { getCloudinaryFetchUrl } from '../utils/cloudinary'
+import SimpleAdVisual from './SimpleAdVisual.astro'
+
+export interface Props {
+  headline?: string
+  subhead?: string
+  disclaimer?: string
+  backgroundImage?: string
+  heroImageUrl?: string
+}
+
+const {
+  headline = "Stop Wasting Half Your Ad Budget on the Wrong People",
+  subhead = "Get clear visibility into what's working and what's not. We provide detailed performance reports at 30, 60, and 90 day checkpoints so you know exactly where to invest.",
+  disclaimer = "Transparent reporting • Data-driven decisions • Clear ROI tracking",
+  backgroundImage = null,
+  heroImageUrl = null,
+} = Astro.props
+
+// Use heroImageUrl if provided, otherwise backgroundImage
+const imageSource = heroImageUrl || backgroundImage
+
+const bgImage = imageSource
+  ? getCloudinaryFetchUrl(imageSource, { width: 1920, quality: 80 })
+  : null
+---
+
+<section class="relative min-h-screen lg:min-h-[110vh] flex flex-col justify-center overflow-hidden py-20 bg-gradient-to-b from-brand-black to-transparent">
+  <!-- Background -->
+  <div class="absolute inset-0 z-0">
+    {bgImage && (
+      <img
+        src={bgImage}
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover opacity-20"
+        loading="eager"
+      />
+    )}
+    <div class="absolute inset-0 bg-gradient-to-b from-brand-black via-brand-black/95 to-brand-black/50"></div>
+    <!-- Smooth transition gradient at bottom -->
+    <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-b from-transparent to-brand-black/95"></div>
+
+    <!-- Decorative floating elements -->
+    <div class="absolute top-20 left-10 w-96 h-96 bg-brand-accentBlue/20 rounded-full blur-3xl animate-float"></div>
+    <div class="absolute bottom-[30%] right-10 w-96 h-96 bg-brand-accentOrange/20 rounded-full blur-3xl animate-float-delayed"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-accentRed/10 rounded-full blur-3xl animate-glow-pulse"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="luxury-container relative z-10">
+    <div class="max-w-5xl mx-auto">
+      <!-- Text content centered -->
+      <div class="text-center">
+        <h1 class="luxury-h1 mb-8 lg:mb-10 max-w-4xl mx-auto">
+        {headline.split(' ').map((word, i) => (
+          <>
+            {word === 'Wasting' ? (
+              <span class="text-brand-accentRed">
+                {' ' + word}
+              </span>
+            ) : word === 'Half' ? (
+              <span class="text-brand-accentOrange font-bold">
+                {' ' + word}
+              </span>
+            ) : (
+              (i === 0 ? '' : ' ') + word
+            )}
+          </>
+        ))}
+      </h1>
+
+        <p class="luxury-body text-lg lg:text-xl mb-10 lg:mb-12 max-w-3xl mx-auto text-brand-white/80">
+          {subhead}
+        </p>
+
+        <!-- Intent Bar will go here -->
+        <div id="intent-bar-container" class="mb-10 max-w-2xl mx-auto"></div>
+
+        {disclaimer && (
+          <p class="luxury-caption flex items-center justify-center gap-2 mb-12 lg:mb-16">
+            <span class="i-heroicons-information-circle text-brand-accentBlue"></span>
+            {disclaimer}
+          </p>
+        )}
+
+        <!-- Simple Ad Visual below text -->
+        <div class="relative h-[400px] lg:h-[500px] flex items-center justify-center mt-12 lg:mt-16">
+          <SimpleAdVisual className="scale-90 lg:scale-100" />
+          <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-10 right-10 w-40 h-40 bg-brand-accentBlue/10 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-[20%] left-10 w-40 h-40 bg-brand-accentOrange/10 rounded-full blur-3xl animate-float-delayed"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <div class="w-8 h-12 rounded-full border-2 border-brand-white/20 flex items-start justify-center p-2">
+      <div class="w-1 h-3 bg-brand-white/60 rounded-full"></div>
+    </div>
+  </div>
+</section>

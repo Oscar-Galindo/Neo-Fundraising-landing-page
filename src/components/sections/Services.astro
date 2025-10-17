@@ -1,0 +1,79 @@
+---
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  services?: Array<{
+    title: string;
+    description: string;
+    price?: string;
+    features?: string[];
+    icon?: string;
+    ctaText?: string;
+    ctaLink?: string;
+  }>;
+}
+
+const { title, subtitle, services = [] } = Astro.props;
+---
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    {(title || subtitle) && (
+      <div class="text-center mb-12">
+        {title && (
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {title}
+          </h2>
+        )}
+        {subtitle && (
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            {subtitle}
+          </p>
+        )}
+      </div>
+    )}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {services.map((service) => (
+        <div class="bg-gray-50 rounded-lg p-6 hover:shadow-lg transition-shadow">
+          {service.icon && (
+            <div class="w-14 h-14 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+              <span class="text-3xl">{service.icon}</span>
+            </div>
+          )}
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            {service.title}
+          </h3>
+          <p class="text-gray-600 mb-4">
+            {service.description}
+          </p>
+          {service.price && (
+            <p class="text-2xl font-bold text-primary-600 mb-4">
+              {service.price}
+            </p>
+          )}
+          {service.features && service.features.length > 0 && (
+            <ul class="space-y-2 mb-6">
+              {service.features.map((feature) => (
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-700 text-sm">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {service.ctaText && service.ctaLink && (
+            <a
+              href={service.ctaLink}
+              class="block text-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              {service.ctaText}
+            </a>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

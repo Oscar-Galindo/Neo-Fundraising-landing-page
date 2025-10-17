@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/sections/Hero.astro';
+import { getPage, getSiteSettings } from '../lib/api/contentful';
+
+// Fetch page data from Contentful
+const page = await getPage('home');
+const settings = await getSiteSettings();
+
+// Fetch all homepage content sections from Contentful
+let sections: any[] = [];
+try {
+  const response = await fetch(
+    `https://cdn.contentful.com/spaces/jn2q4lg00k6r/environments/master/entries?content_type=homepageContent&access_token=2fYu3LsT9wMrMtbGwDd1vyYIVetYvaaUqzeh8MYWC3g&order=sys.createdAt`
+  );
+  const data = await response.json();
+  sections = data.items.map((item: any) => item.fields);
+  console.log(`📄 Loaded ${sections.length} sections from Contentful`);
+} catch (error) {
+  console.warn('Could not fetch sections:', error);
+  sections = [];
+}
+---
+
+<Layout title={page?.seo?.metaTitle || 'Home'}>
+  {sections.length > 0 ? (
+    sections.map((section: any) => {
+      // Render hero section with Hero component
+      if (section.sectionName === 'hero') {
+        return (
+          <Hero
+            title={section.headline}
+            subtitle={section.subheadline}
+            description={section.disclaimer}
+            variant="center"
+            height="large"
+          />
+        );
+      }
+      
+      // Render all other sections as generic content
+      return (
+        <section class="section">
+          <div class="container">
+            <div class="text-center max-w-3xl mx-auto">
+              <h2 class="h2 mb-6">{section.headline}</h2>
+              {section.description && (
+                <p class="text-lg text-gray-600">{section.description}</p>
+              )}
+              {section.disclaimer && (
+                <p class="text-sm text-gray-500 mt-4">{section.disclaimer}</p>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    })
+  ) : (
+    <section class="section">
+      <div class="container">
+        <div class="text-center max-w-3xl mx-auto">
+          <h2 class="h2 mb-6">Flexible & Powerful</h2>
+          <p class="text-lg text-gray-600">
+            This starter kit includes everything you need:
+          </p>
+          <div class="grid md:grid-cols-3 gap-8 mt-12">
+            <div class="card">
+              <div class="text-4xl mb-4">🚀</div>
+              <h3 class="text-xl font-bold mb-2">Fast Performance</h3>
+              <p class="text-gray-600">
+                Built with Astro for lightning-fast load times and excellent SEO.
+              </p>
+            </div>
+            <div class="card">
+              <div class="text-4xl mb-4">🎨</div>
+              <h3 class="text-xl font-bold mb-2">Easy to Customize</h3>
+              <p class="text-gray-600">
+                Contentful CMS makes it simple to update content without coding.
+              </p>
+            </div>
+            <div class="card">
+              <div class="text-4xl mb-4">📱</div>
+              <h3 class="text-xl font-bold mb-2">Mobile Ready</h3>
+              <p class="text-gray-600">
+                Responsive design that looks great on all devices.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>

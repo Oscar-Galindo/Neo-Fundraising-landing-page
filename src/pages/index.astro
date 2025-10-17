@@ -1,73 +1,331 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/sections/Hero.astro';
-import { getPage, getSiteSettings } from '../lib/api/contentful';
+import Base from '../layouts/Base.astro'
+import Hero from '../components/Hero.astro'
+import { IntentBar } from '../components/IntentBar'
+import { MilestoneTimeline } from '../components/MilestoneTimeline'
+import AnimatedVisuals from '../components/AnimatedVisuals.astro'
+import { fetchAllContent, preferCMS } from '../utils/contentful'
+import { getCloudinaryFetchUrl } from '../utils/cloudinary'
 
-// Fetch page data from Contentful
-const page = await getPage('home');
-const settings = await getSiteSettings();
-
-// Use mock data if Contentful is not configured yet
-const heroData = page?.sections?.find(s => s.fields.contentType === 'heroSection')?.fields || {
-  title: 'Welcome to Your New Site',
-  subtitle: 'Church & Business Starter Kit',
-  description: 'A modern, flexible website starter that adapts to your needs. Perfect for churches and small businesses.',
-  primaryCTA: {
-    label: 'Get Started',
-    href: '/contact',
-  },
-  secondaryCTA: {
-    label: 'Learn More',
-    href: '/about',
-  },
-  variant: 'center',
-  height: 'large',
-  // Mock background image from Unsplash
-  backgroundImage: {
-    fields: {
-      file: {
-        url: 'https://images.unsplash.com/photo-1478147427282-58a87a120781?w=1920',
-      },
-    },
-  },
-};
+const content = await fetchAllContent()
 ---
 
-<Layout title={page?.seo?.metaTitle || 'Home'}>
-  <Hero {...heroData} />
+<Base>
+  <!-- Urgency Banner -->
+  <div class="bg-brand-accentOrange text-brand-black py-2 text-center text-sm font-medium">
+    <span class="animate-pulse inline-block mr-2">🔥</span>
+    Limited Q1 Spots: Only 3 partnerships available for January
+    <span class="animate-pulse inline-block ml-2">🔥</span>
+  </div>
 
-  <!-- Additional sections will be added here -->
-  <section class="section">
-    <div class="container">
-      <div class="text-center max-w-3xl mx-auto">
-        <h2 class="h2 mb-6">Flexible & Powerful</h2>
-        <p class="text-lg text-gray-600">
-          This starter kit includes everything you need:
-        </p>
-        <div class="grid md:grid-cols-3 gap-8 mt-12">
-          <div class="card">
-            <div class="text-4xl mb-4">🚀</div>
-            <h3 class="text-xl font-bold mb-2">Fast Performance</h3>
-            <p class="text-gray-600">
-              Built with Astro for lightning-fast load times and excellent SEO.
-            </p>
+  <!-- Hero with Intent Bar -->
+  <Hero
+    headline={preferCMS(content.hero?.headline, "Programmatic that proves what is working and what is wasting your budget")}
+    subhead={preferCMS(content.hero?.subhead, "We run a 90 day performance runway with 30 60 90 checkpoints so you see what to cut what to scale and what comes next.")}
+    disclaimer={preferCMS(content.hero?.disclaimer, "Quarterly media terms through partners for premium brand safe inventory")}
+    heroImageUrl={content.hero?.heroImageUrl}
+    backgroundImage={content.hero?.backgroundImage}
+  />
+  <div id="intent-bar-container" class="-mt-32 relative z-20">
+    <IntentBar client:load />
+  </div>
+
+  <!-- The Right Channel for the Job -->
+  <section class="luxury-section relative overflow-hidden bg-gradient-to-b from-brand-black via-brand-gray/10 to-brand-gray/5">
+    <div class="absolute top-0 right-0 w-64 h-64 opacity-20">
+      <AnimatedVisuals type="data-flow" />
+    </div>
+    <div class="luxury-container relative z-10">
+      <h2 class="luxury-h2 text-center mb-12">The Right Channel for the Job</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        {[
+          { title: 'Display & Video', desc: preferCMS(content.channels?.bullets?.[0], "Reach customers on 2M+ premium websites and streaming services"), icon: 'i-heroicons-tv', color: 'accentBlue' },
+          { title: 'Social Media', desc: preferCMS(content.channels?.bullets?.[1], "Target your exact audience on Facebook, Instagram, LinkedIn & TikTok"), icon: 'i-heroicons-user-group', color: 'accentOrange' },
+          { title: 'Google & Bing', desc: preferCMS(content.channels?.bullets?.[2], "Capture high-intent customers actively searching for your services"), icon: 'i-heroicons-magnifying-glass', color: 'accentRed' }
+        ].map((channel) => (
+          <div class="bg-brand-gray/50 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-brand-white/5 group hover:border-brand-accentBlue/30 transition-all relative">
+            <div class={`w-14 h-14 rounded-xl bg-brand-${channel.color}/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+              <span class={`${channel.icon} text-2xl text-brand-${channel.color}`}></span>
+            </div>
+            <h3 class="text-lg font-medium text-brand-white mb-3">{channel.title}</h3>
+            <p class="text-sm text-brand-white/80 leading-relaxed">{channel.desc}</p>
+            <div class="absolute top-4 right-4 w-24 h-24 opacity-5 group-hover:opacity-10 transition-opacity">
+              <AnimatedVisuals type={channel.title === 'Programmatic' ? 'network' : channel.title === 'Paid Social' ? 'data-flow' : 'targeting'} />
+            </div>
           </div>
-          <div class="card">
-            <div class="text-4xl mb-4">🎨</div>
-            <h3 class="text-xl font-bold mb-2">Easy to Customize</h3>
-            <p class="text-gray-600">
-              Contentful CMS makes it simple to update content without coding.
-            </p>
-          </div>
-          <div class="card">
-            <div class="text-4xl mb-4">📱</div>
-            <h3 class="text-xl font-bold mb-2">Mobile Ready</h3>
-            <p class="text-gray-600">
-              Responsive design that looks great on all devices.
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   </section>
-</Layout>
+
+  <!-- Method 3-up -->
+  <section id="method" class="luxury-section bg-gradient-to-b from-brand-gray/5 via-brand-black to-brand-gray/10 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-20 left-20 w-96 h-96 bg-brand-accentBlue rounded-full blur-3xl animate-float"></div>
+      <div class="absolute bottom-20 right-20 w-96 h-96 bg-brand-accentOrange rounded-full blur-3xl animate-float-delayed"></div>
+    </div>
+    <div class="luxury-container relative z-10">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-brand-accentBlue/10 rounded-full text-brand-accentBlue text-sm font-medium mb-6">
+          <span class="i-heroicons-shield-check"></span>
+          Powered by Propellant Media's Enterprise Platform
+        </div>
+        <h2 class="luxury-h2 mb-4">{preferCMS(content.method?.title, "Our Data-Driven Method")}</h2>
+        <p class="text-brand-white/70 max-w-2xl mx-auto">
+          {preferCMS(content.method?.description, "Every campaign follows our proven 90-day framework, backed by Propellant's premium inventory access and brand safety guarantees")}
+        </p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {(content.method?.items || [
+          { timeline: '30 Days', title: 'Analyze & Optimize', description: 'Establish baseline and identify opportunities' },
+          { timeline: '60 Days', title: 'Test & Improve', description: 'Run tests and optimize winning strategies' },
+          { timeline: '90 Days', title: 'Scale Winners', description: 'Scale what works and document playbook' }
+        ]).map((step, index) => (
+          <div class="relative group">
+            {index < 2 && (
+              <div class="hidden lg:block absolute top-1/2 -right-4 w-8 h-px bg-gradient-to-r from-brand-accentBlue to-transparent"></div>
+            )}
+            <div class="bg-brand-gray/50 backdrop-blur-sm border border-brand-white/10 rounded-2xl p-8 hover:border-brand-accentBlue/50 transition-all duration-300 group-hover:transform group-hover:scale-105">
+              <div class="flex items-center justify-between mb-6">
+                <span class="text-brand-accentBlue font-bold text-lg">{step.timeline}</span>
+                <div class="w-12 h-12 rounded-xl bg-brand-accentBlue/10 flex items-center justify-center group-hover:bg-brand-accentBlue/20 transition-colors">
+                  {index === 0 && <span class="i-heroicons-chart-bar text-brand-accentBlue text-xl"></span>}
+                  {index === 1 && <span class="i-heroicons-beaker text-brand-accentBlue text-xl"></span>}
+                  {index === 2 && <span class="i-heroicons-rocket-launch text-brand-accentBlue text-xl"></span>}
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-brand-white mb-3">{step.title}</h3>
+              <p class="text-brand-white/70 text-sm mb-6">{step.description}</p>
+              <div class="mt-6 pt-6 border-t border-brand-white/10">
+                <div class="flex items-center justify-between text-xs text-brand-white/50">
+                  <span>Progress</span>
+                  <span>{index === 0 ? '33%' : index === 1 ? '66%' : '100%'}</span>
+                </div>
+                <div class="mt-2 h-2 bg-brand-black/50 rounded-full overflow-hidden">
+                  <div
+                    class="h-full bg-gradient-to-r from-brand-accentBlue to-brand-accentOrange rounded-full"
+                    style={`width: ${index === 0 ? '33%' : index === 1 ? '66%' : '100%'}`}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 30-60-90 Timeline -->
+  <section id="timeline" class="luxury-section bg-gradient-to-b from-brand-gray/10 via-brand-gray/20 to-brand-black">
+    <div class="luxury-container">
+      <h2 class="luxury-h2 text-center mb-16">Your 90-Day Performance Runway</h2>
+      <MilestoneTimeline client:load />
+    </div>
+  </section>
+
+  <!-- Why These Partners -->
+  <section class="luxury-section bg-gradient-to-b from-brand-black via-brand-gray/5 to-brand-gray/15">
+    <div class="luxury-container">
+      <h2 class="luxury-h2 text-center mb-16">Why These Partners</h2>
+      <div class="luxury-grid-2 gap-12">
+        {[
+          { name: 'Propellant Media', features: ['Programmatic expertise', 'PMP access', 'Brand safety'] },
+          { name: 'North American Advertising', features: ['Paid social mastery', 'Creative testing', 'Audience controls'] }
+        ].map((partner) => (
+          <div class="luxury-card">
+            <h3 class="luxury-h3 text-2xl mb-6">{partner.name}</h3>
+            <ul class="space-y-3">
+              {partner.features.map((feature) => (
+                <li class="flex items-center gap-3">
+                  <span class="i-heroicons-check-circle text-brand-accentBlue"></span>
+                  <span class="luxury-body">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof and Results -->
+  <section id="results" class="luxury-section relative overflow-hidden bg-gradient-to-b from-brand-gray/15 via-brand-gray/25 to-brand-gray/10">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 opacity-10">
+      <AnimatedVisuals type="growth" />
+    </div>
+    <div class="luxury-container relative z-10">
+      <h2 class="luxury-h2 text-center mb-16">Proof in Performance</h2>
+      <div class="luxury-grid-4">
+        {[
+          { label: 'Display CPL', value: '−24 to −38%', subtext: 'by day 60' },
+          { label: 'CTV Conversions', value: '2.8× to 3.4×', subtext: 'q over q' },
+          { label: 'Retargeting QLR', value: '+31 to +54%', subtext: 'after testing' },
+          { label: 'Social QLR', value: '+22 to +41%', subtext: 'after rounds' }
+        ].map((stat) => (
+          <div class="text-center">
+            <div class="text-3xl font-light text-brand-accentBlue mb-2 animate-float">
+              {stat.value}
+            </div>
+            <div class="luxury-body font-medium mb-1">{stat.label}</div>
+            <div class="luxury-muted text-xs">{stat.subtext}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries We Serve -->
+  <section id="industries" class="luxury-section bg-gradient-to-b from-brand-gray/10 via-brand-black to-brand-gray/5">
+    <div class="luxury-container">
+      <h2 class="luxury-h2 text-center mb-12">Industries We Serve</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {[
+          { name: 'SaaS', icon: 'i-heroicons-cloud', color: 'blue' },
+          { name: 'Healthcare', icon: 'i-heroicons-heart', color: 'red' },
+          { name: 'Finance', icon: 'i-heroicons-banknotes', color: 'green' },
+          { name: 'Real Estate', icon: 'i-heroicons-home-modern', color: 'orange' },
+          { name: 'Retail', icon: 'i-heroicons-shopping-bag', color: 'purple' },
+          { name: 'Education', icon: 'i-heroicons-academic-cap', color: 'yellow' }
+        ].map((industry, i) => (
+          <div class="group relative overflow-hidden">
+            <div class="bg-brand-gray/50 border border-brand-white/10 rounded-xl p-6 text-center hover:border-brand-accentOrange/50 hover:bg-brand-gray/70 transition-all duration-300 cursor-pointer">
+              <div class="flex flex-col items-center space-y-3">
+                <div class="w-12 h-12 rounded-lg bg-brand-accentBlue/10 flex items-center justify-center group-hover:bg-brand-accentOrange/20 transition-all">
+                  <span class={`${industry.icon} text-2xl text-brand-white/70 group-hover:text-brand-accentOrange transition-colors`}></span>
+                </div>
+                <h3 class="text-sm font-medium text-brand-white/90 group-hover:text-brand-white transition-colors">{industry.name}</h3>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-brand-accentOrange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="text-center mt-8 text-brand-white/60 text-sm">
+        Proven success across diverse industries with tailored strategies for each vertical
+      </p>
+    </div>
+  </section>
+
+  <!-- How We Work With Your Systems -->
+  <section class="luxury-section bg-gradient-to-b from-brand-gray/5 via-brand-gray/10 to-brand-black">
+    <div class="luxury-container">
+      <h2 class="luxury-h2 text-center mb-6">Seamless Integration With Your Existing Tools</h2>
+      <p class="text-center luxury-body mb-12 max-w-3xl mx-auto">
+        We don't replace your systems—we enhance them. Our platform connects with your current CRM and marketing stack to provide unified reporting.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          {
+            title: 'CRM Integration',
+            desc: 'Works with Salesforce, HubSpot, Pipedrive, or any CRM you use',
+            icon: 'i-heroicons-link'
+          },
+          {
+            title: 'Real-Time Reporting',
+            desc: 'Live dashboards showing exactly where your budget is going',
+            icon: 'i-heroicons-chart-bar-square'
+          },
+          {
+            title: 'Lead Tracking',
+            desc: 'See which ads drive real revenue, not just clicks',
+            icon: 'i-heroicons-user-plus'
+          },
+          {
+            title: 'Custom Analytics',
+            desc: 'Reports tailored to your KPIs and business goals',
+            icon: 'i-heroicons-presentation-chart-line'
+          }
+        ].map((item) => (
+          <div class="bg-brand-gray/30 rounded-xl p-6 border border-brand-white/5 hover:border-brand-accentBlue/30 transition-all">
+            <div class="w-12 h-12 rounded-lg bg-brand-accentBlue/10 flex items-center justify-center mb-4">
+              <span class={`${item.icon} text-2xl text-brand-accentBlue`}></span>
+            </div>
+            <h3 class="text-base font-medium text-brand-white mb-2">{item.title}</h3>
+            <p class="text-sm text-brand-white/70 leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+      <div class="text-center mt-10">
+        <p class="luxury-caption">
+          <span class="i-heroicons-check-circle text-brand-accentBlue mr-2"></span>
+          No new software to learn • Integrates with your existing workflow • White-glove onboarding included
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Primary CTA Block -->
+  <section class="luxury-section bg-gradient-to-b from-brand-black via-brand-gray/15 to-brand-gray/5">
+    <div class="luxury-container text-center">
+      <h2 class="luxury-h2 mb-6">
+        {preferCMS(content.ctaHeadline, "A 90 day runway designed to prove or improve return")}
+      </h2>
+      <p class="luxury-body text-xl mb-12 max-w-2xl mx-auto">
+        {preferCMS(content.ctaBody, "Clarity by day 30 traction by day 60 scale by day 90")}
+      </p>
+      <button
+        onclick="document.getElementById('intent-bar-container').scrollIntoView({behavior: 'smooth'}); gtag?.('event', 'cta_click', {event_category: 'engagement', event_label: 'primary_cta'});"
+        class="luxury-btn-accent"
+      >
+        Get Your Performance Analysis →
+      </button>
+      <p class="luxury-caption mt-6">See how your campaigns could perform better</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="luxury-section bg-gradient-to-b from-brand-gray/5 via-brand-black to-brand-gray/20">
+    <div class="luxury-container">
+      <h2 class="luxury-h2 text-center mb-16">Frequently Asked Questions</h2>
+      <div class="max-w-3xl mx-auto space-y-6">
+        {[
+          { q: "Why 90 days?", a: "90 days provides enough time to establish baselines, run statistically significant tests, and scale winners while maintaining budget discipline." },
+          { q: "What happens at 30 60 90?", a: "Day 30: Performance baseline established. Day 60: Winners identified and optimized. Day 90: Scaled campaigns with documented playbook." },
+          { q: "Do you manage social ads?", a: "Yes, through our partnership with North American Advertising, we handle Meta, LinkedIn, and TikTok with rapid creative testing." },
+          { q: "Brand safety and fraud prevention?", a: "We implement pre-bid fraud detection, brand safety filters, and viewability standards from day one across all campaigns." }
+        ].map((faq) => (
+          <details class="luxury-card cursor-pointer group">
+            <summary class="flex items-center justify-between">
+              <h3 class="luxury-body font-medium">{faq.q}</h3>
+              <span class="i-heroicons-chevron-down text-brand-white/60 group-open:rotate-180 transition-transform"></span>
+            </summary>
+            <p class="luxury-muted mt-4">{faq.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer CTA -->
+  <section class="luxury-section bg-gradient-to-b from-brand-gray/20 via-brand-gray/30 to-brand-black">
+    <div class="luxury-container text-center">
+      <h2 class="luxury-h3 mb-6">Ready to see what's really working?</h2>
+      <button
+        onclick="document.getElementById('intent-bar-container').scrollIntoView({behavior: 'smooth'}); gtag?.('event', 'cta_click', {event_category: 'engagement', event_label: 'footer_cta'});"
+        class="luxury-btn-primary"
+      >
+        Start Your 90-Day Runway →
+      </button>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Initialize analytics
+  declare global {
+    interface Window {
+      gtag: any;
+    }
+  }
+
+  // Add smooth scroll behavior
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>

@@ -8,6 +8,14 @@ import {
 } from 'unocss'
 
 export default defineConfig({
+  content: {
+    pipeline: {
+      include: [
+        /\.(vue|svelte|[jt]sx?|mdx?|astro)($|\?)/,
+        'src/**/*.{js,ts,jsx,tsx,astro}',
+      ],
+    },
+  },
   presets: [
     presetUno(),
     presetTypography(),
@@ -26,6 +34,12 @@ export default defineConfig({
   ],
   theme: {
     colors: {
+      primary: {
+        '400': 'rgb(96, 165, 250)',
+        '500': 'rgb(59, 130, 246)',
+        '600': 'rgb(37, 99, 235)',
+        '700': 'rgb(29, 78, 216)',
+      },
       brand: {
         black: '#0F0F0F',
         white: '#FCFCFC',
@@ -33,7 +47,6 @@ export default defineConfig({
         accentBlue: '#00B0F1',
         accentOrange: '#FFB231',
         accentRed: '#FF5253',
-        // Legacy names for compatibility
         accentCyan: '#00B0F1',
       },
     },
@@ -113,14 +126,26 @@ export default defineConfig({
     'wireframe': 'border-2 border-dashed border-red-500/50',
   },
   safelist: [
+    'text-primary-400',
     'text-brand-accentBlue',
     'text-brand-accentOrange',
     'text-brand-accentRed',
+    'bg-primary-600',
+    'bg-primary-700',
     'bg-brand-accentBlue',
     'bg-brand-accentOrange',
     'bg-brand-accentRed',
     'animate-float',
     'animate-float-delayed',
     'animate-glow-pulse',
+    'hover:bg-primary-700',
+    'focus:ring-primary-500',
+    'bg-gray-200',
+    'text-gray-900',
+    'hover:bg-gray-300',
+    'focus:ring-gray-500',
+    'bg-gray-50',
+    'border-gray-300',
+    'text-gray-600',
   ],
 })

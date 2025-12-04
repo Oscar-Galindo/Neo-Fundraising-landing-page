@@ -8,7 +8,6 @@
     "preview": "astro preview",
     "astro": "astro",
     "build:protected": "node scripts/build-protected.js",
-    "validate-license": "node -e \"import('./src/lib/license-validator.ts').then(m => m.licenseValidator.validateLicense().then(console.log))\"",
     "setup:fundraiser": "node setup-fundraiser-contentful.cjs",
     "populate:fundraiser": "node populate-fundraiser-content.cjs",
     "setup:nehemiah": "node setup-nehemiah-contentful.cjs",

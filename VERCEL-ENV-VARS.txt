@@ -1,0 +1,35 @@
+Copy and paste these into Vercel → Settings → Environment Variables
+
+Add each one individually:
+
+Name: CONTENTFUL_SPACE_ID
+Value: rpwkj4sr23ch
+
+Name: PUBLIC_CONTENTFUL_ACCESS_TOKEN
+Value: ZHxmtSN-wW7TztIXy6Hod0XtfZNJC_JkwmGq65ACLVw
+
+Name: CONTENTFUL_PREVIEW_TOKEN
+Value: E9sQb6CdDqWFgQiMydUIUxn0tHTHc3J0ZASQiL_YQGA
+
+Name: CONTENTFUL_ENVIRONMENT
+Value: master
+
+Name: PUBLIC_CLOUDINARY_CLOUD_NAME
+Value: dwfxmqw4v
+
+Name: CLOUDINARY_CLOUD_NAME
+Value: dwfxmqw4v
+
+Name: SITE_NAME
+Value: Nehemiah's Road to Madrid
+
+Name: SITE_TYPE
+Value: fundraiser
+
+After adding all of them:
+1. Go to Deployments tab
+2. Click "..." on latest deployment
+3. Click "Redeploy"
+4. Wait 2 minutes
+5. Your site will work!
+

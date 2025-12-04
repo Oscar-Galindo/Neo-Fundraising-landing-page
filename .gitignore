@@ -13,12 +13,36 @@ yarn-error.log*
 pnpm-debug.log*
 
 
-# environment variables
+# environment variables (NEVER commit these!)
 .env
 .env.production
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # macOS-specific files
 .DS_Store
 
-# jetbrains setting folder
-.idea/
+# Lock files (optional - uncomment to ignore)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Test outputs
+coverage/
+.nyc_output/
+
+# Build caches
+.cache/
+.turbo/
+
+# Sensitive files
+secrets.json
+api-keys.json
+credentials.json

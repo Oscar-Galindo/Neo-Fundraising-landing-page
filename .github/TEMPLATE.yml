@@ -1,0 +1,7 @@
+# GitHub Repository Template Configuration
+# This makes this repo available as a template for new projects
+
+name: Nexus Starter Kit
+description: A professional, high-performance website builder with Astro, Contentful CMS, and React components.
+owner: nexus-starter
+public_template: true

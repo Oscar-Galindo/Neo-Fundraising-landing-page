@@ -1,0 +1,283 @@
+---
+import Base from '../layouts/Base.astro'
+import { FundraiserStats } from '../components/fundraiser/FundraiserStats'
+import { DonationButton } from '../components/fundraiser/DonationButton'
+import { MilestoneProgress } from '../components/fundraiser/MilestoneProgress'
+import { SimpleContactForm } from '../components/fundraiser/SimpleContactForm'
+import { getAllFundraiserData, extractImageUrl } from '../lib/api/fundraiser'
+import { getCloudinaryFetchUrl } from '../utils/cloudinary'
+
+const { settings, content, updates } = await getAllFundraiserData()
+
+// If no settings found, show setup message
+if (!settings) {
+  return Astro.redirect('/setup-needed')
+}
+
+const hero = content.hero
+const story = content.story
+const goal = content.goal
+const milestones = content.milestones
+const impact = content.impact
+const faq = content.faq
+
+const percentageReached = (settings.currentAmount / settings.goalAmount) * 100
+
+// Get hero image
+const heroImageUrl = hero?.image ? extractImageUrl(hero.image) : null
+const heroImage = heroImageUrl ? getCloudinaryFetchUrl(heroImageUrl, { width: 1920, quality: 80 }) : null
+
+const pageTitle = settings.fundraiserName || 'Support Our Fundraiser'
+const pageDescription = hero?.subheadline || 'Help us reach our goal!'
+---
+
+<Base title={pageTitle} description={pageDescription} ogImage={heroImage || undefined}>
+  <!-- Hero Section -->
+  <section class="relative min-h-[90vh] flex flex-col justify-center overflow-hidden py-20 bg-gradient-to-b from-brand-black to-brand-gray/20">
+    <!-- Background -->
+    <div class="absolute inset-0 z-0">
+      {heroImage && (
+        <img
+          src={heroImage}
+          alt=""
+          class="absolute inset-0 w-full h-full object-cover opacity-20"
+          loading="eager"
+        />
+      )}
+      <div class="absolute inset-0 bg-gradient-to-b from-brand-black/80 via-brand-black/70 to-brand-black"></div>
+      
+      <!-- Decorative elements -->
+      <div class="absolute top-20 left-10 w-96 h-96 bg-brand-accentBlue/20 rounded-full blur-3xl animate-float"></div>
+      <div class="absolute bottom-20 right-10 w-96 h-96 bg-brand-accentOrange/20 rounded-full blur-3xl animate-float-delayed"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="luxury-container relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="luxury-h1 mb-6">
+          {hero?.headline || settings.fundraiserName}
+        </h1>
+        
+        {hero?.subheadline && (
+          <p class="luxury-body text-xl mb-12 text-brand-white/80">
+            {hero.subheadline}
+          </p>
+        )}
+
+        <!-- Stats Component -->
+        <div class="mb-12">
+          <FundraiserStats
+            goalAmount={settings.goalAmount}
+            currentAmount={settings.currentAmount}
+            donorCount={settings.donorCount}
+            endDate={settings.endDate}
+            client:load
+          />
+        </div>
+
+        <!-- Donation Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <DonationButton 
+            url={settings.primaryDonationUrl}
+            text={hero?.ctaText || 'Donate Now'}
+            variant="primary"
+            client:load
+          />
+          {settings.secondaryDonationUrl && (
+            <DonationButton 
+              url={settings.secondaryDonationUrl}
+              text="Donate via PayPal"
+              variant="secondary"
+              client:load
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  {story && (
+    <section class="luxury-section bg-gradient-to-b from-brand-black via-brand-gray/10 to-brand-gray/5">
+      <div class="luxury-container">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="luxury-h2 text-center mb-8">{story.headline}</h2>
+          {story.description && (
+            <div class="luxury-body space-y-4 text-center whitespace-pre-line">
+              {story.description}
+            </div>
+          )}
+          {story.image && (
+            <div class="mt-8 rounded-2xl overflow-hidden">
+              <img
+                src={extractImageUrl(story.image)}
+                alt={story.headline || 'Our story'}
+                class="w-full h-auto"
+                loading="lazy"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Goal Breakdown Section -->
+  {goal && goal.items && (
+    <section class="luxury-section bg-gradient-to-b from-brand-gray/5 via-brand-black to-brand-gray/10">
+      <div class="luxury-container">
+        <h2 class="luxury-h2 text-center mb-12">{goal.headline}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {goal.items.map((item: any) => (
+            <div class="luxury-card text-center">
+              <div class="text-3xl font-bold text-brand-accentBlue mb-3">
+                ${item.amount?.toLocaleString()}
+              </div>
+              <h3 class="text-xl font-semibold text-brand-white mb-2">
+                {item.title}
+              </h3>
+              {item.description && (
+                <p class="text-brand-white/70">{item.description}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Milestones Section -->
+  {milestones && milestones.items && (
+    <section class="luxury-section bg-gradient-to-b from-brand-gray/10 via-brand-gray/20 to-brand-black">
+      <div class="luxury-container">
+        <h2 class="luxury-h2 text-center mb-16">{milestones.headline}</h2>
+        <MilestoneProgress
+          milestones={milestones.items}
+          currentPercentage={percentageReached}
+          client:load
+        />
+      </div>
+    </section>
+  )}
+
+  <!-- Impact Section -->
+  {impact && impact.items && (
+    <section class="luxury-section bg-gradient-to-b from-brand-black via-brand-gray/5 to-brand-gray/15">
+      <div class="luxury-container">
+        <h2 class="luxury-h2 text-center mb-12">{impact.headline}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          {impact.items.map((item: any, index: number) => (
+            <div class="bg-brand-gray/50 backdrop-blur-sm rounded-xl p-6 border border-brand-white/10 text-center hover:border-brand-accentOrange/50 transition-all">
+              <div class="text-2xl font-bold text-brand-accentOrange mb-3">
+                {item.amount}
+              </div>
+              <p class="text-sm text-brand-white/80">{item.impact}</p>
+            </div>
+          ))}
+        </div>
+        <div class="text-center mt-10">
+          <DonationButton 
+            url={settings.primaryDonationUrl}
+            text="Make Your Impact"
+            variant="primary"
+            client:load
+          />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Updates Section -->
+  {updates && updates.length > 0 && (
+    <section class="luxury-section bg-gradient-to-b from-brand-gray/15 via-brand-black to-brand-gray/10">
+      <div class="luxury-container">
+        <h2 class="luxury-h2 text-center mb-12">Recent Updates</h2>
+        <div class="max-w-3xl mx-auto space-y-6">
+          {updates.map((update) => (
+            <div class="luxury-card">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold text-brand-white">{update.title}</h3>
+                <span class="text-sm text-brand-white/60">
+                  {new Date(update.date).toLocaleDateString()}
+                </span>
+              </div>
+              <p class="text-brand-white/80 whitespace-pre-line">{update.content}</p>
+              {update.image && (
+                <div class="mt-4 rounded-lg overflow-hidden">
+                  <img
+                    src={extractImageUrl(update.image)}
+                    alt={update.title}
+                    class="w-full h-auto"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- FAQ Section -->
+  {faq && faq.items && (
+    <section class="luxury-section bg-gradient-to-b from-brand-gray/10 via-brand-black to-brand-gray/20">
+      <div class="luxury-container">
+        <h2 class="luxury-h2 text-center mb-12">{faq.headline}</h2>
+        <div class="max-w-3xl mx-auto space-y-4">
+          {faq.items.map((item: any) => (
+            <details class="luxury-card cursor-pointer group">
+              <summary class="flex items-center justify-between">
+                <h3 class="luxury-body font-medium">{item.question}</h3>
+                <span class="i-heroicons-chevron-down text-brand-white/60 group-open:rotate-180 transition-transform"></span>
+              </summary>
+              <p class="luxury-muted mt-4">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Contact Section -->
+  <section class="luxury-section bg-gradient-to-b from-brand-gray/20 via-brand-gray/10 to-brand-black">
+    <div class="luxury-container">
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <h2 class="luxury-h2 mb-4">Get in Touch</h2>
+        <p class="luxury-body">
+          Have questions? Want to help in other ways? Send us a message!
+        </p>
+      </div>
+      <SimpleContactForm contactEmail={settings.contactEmail} client:load />
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="luxury-section bg-gradient-to-b from-brand-black via-brand-gray/20 to-brand-gray/30">
+    <div class="luxury-container text-center">
+      <h2 class="luxury-h3 mb-6">Every Contribution Matters</h2>
+      <p class="luxury-body mb-8 max-w-2xl mx-auto">
+        Whether it's $5 or $500, every donation brings us closer to our goal and makes a real difference.
+      </p>
+      <DonationButton 
+        url={settings.primaryDonationUrl}
+        text="Support This Fundraiser"
+        variant="primary"
+        className="text-lg px-12 py-5"
+        client:load
+      />
+      {settings.organizerName && (
+        <p class="luxury-caption mt-6">
+          Organized by {settings.organizerName}
+        </p>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  details[open] summary {
+    margin-bottom: 1rem;
+  }
+</style>
+

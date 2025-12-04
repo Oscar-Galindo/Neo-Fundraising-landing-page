@@ -8,7 +8,12 @@
     "preview": "astro preview",
     "astro": "astro",
     "build:protected": "node scripts/build-protected.js",
-    "validate-license": "node -e \"import('./src/lib/license-validator.ts').then(m => m.licenseValidator.validateLicense().then(console.log))\""
+    "validate-license": "node -e \"import('./src/lib/license-validator.ts').then(m => m.licenseValidator.validateLicense().then(console.log))\"",
+    "setup:fundraiser": "node setup-fundraiser-contentful.cjs",
+    "populate:fundraiser": "node populate-fundraiser-content.cjs",
+    "setup:nehemiah": "node setup-nehemiah-contentful.cjs",
+    "populate:nehemiah": "node populate-nehemiah-content.cjs",
+    "setup:media": "node setup-media-models.cjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.0",
@@ -36,6 +41,7 @@
     "contentful-management": "^11.60.1",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
+    "jsdom": "^27.0.0",
     "lenis": "^1.3.11",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

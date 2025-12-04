@@ -1,0 +1,397 @@
+{
+  "contentTypes": [
+    {
+      "sys": {
+        "id": "fundraiserContent",
+        "type": "ContentType"
+      },
+      "displayField": "sectionName",
+      "name": "Fundraiser Content",
+      "description": "All fundraiser page content sections",
+      "fields": [
+        {
+          "id": "sectionName",
+          "name": "Section Name",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "validations": [
+            {
+              "in": [
+                "hero",
+                "story",
+                "goal",
+                "milestones",
+                "impact",
+                "updates",
+                "supporters",
+                "faq",
+                "contact"
+              ]
+            }
+          ],
+          "helpText": "Which section this content is for"
+        },
+        {
+          "id": "headline",
+          "name": "Headline",
+          "type": "Symbol",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "size": {
+                "max": 200
+              }
+            }
+          ]
+        },
+        {
+          "id": "subheadline",
+          "name": "Subheadline",
+          "type": "Text",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "size": {
+                "max": 500
+              }
+            }
+          ]
+        },
+        {
+          "id": "description",
+          "name": "Description/Body Text",
+          "type": "Text",
+          "required": false,
+          "localized": false,
+          "helpText": "Longer description or story content"
+        },
+        {
+          "id": "items",
+          "name": "Section Items (JSON)",
+          "type": "Object",
+          "required": false,
+          "localized": false,
+          "helpText": "Store milestone items, updates, FAQs, etc as JSON array"
+        },
+        {
+          "id": "image",
+          "name": "Section Image",
+          "type": "Link",
+          "linkType": "Asset",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": ["image"]
+            }
+          ]
+        },
+        {
+          "id": "ctaText",
+          "name": "CTA Button Text",
+          "type": "Symbol",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "size": {
+                "max": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "ctaUrl",
+          "name": "CTA Button URL",
+          "type": "Symbol",
+          "required": false,
+          "localized": false,
+          "helpText": "Link to donation page, GoFundMe, PayPal, etc."
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "fundraiserSettings",
+        "type": "ContentType"
+      },
+      "displayField": "fundraiserName",
+      "name": "Fundraiser Settings",
+      "description": "Core fundraiser configuration and stats",
+      "fields": [
+        {
+          "id": "fundraiserName",
+          "name": "Fundraiser Name",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "helpText": "Main fundraiser title"
+        },
+        {
+          "id": "organizerName",
+          "name": "Organizer Name",
+          "type": "Symbol",
+          "required": false,
+          "localized": false,
+          "helpText": "Who is running this fundraiser"
+        },
+        {
+          "id": "goalAmount",
+          "name": "Goal Amount",
+          "type": "Number",
+          "required": true,
+          "localized": false,
+          "helpText": "Total fundraising goal (in dollars)"
+        },
+        {
+          "id": "currentAmount",
+          "name": "Current Amount Raised",
+          "type": "Number",
+          "required": true,
+          "localized": false,
+          "helpText": "Amount raised so far (update this regularly)"
+        },
+        {
+          "id": "donorCount",
+          "name": "Number of Donors",
+          "type": "Integer",
+          "required": false,
+          "localized": false,
+          "defaultValue": 0
+        },
+        {
+          "id": "endDate",
+          "name": "End Date",
+          "type": "Date",
+          "required": false,
+          "localized": false,
+          "helpText": "When does the fundraiser end?"
+        },
+        {
+          "id": "primaryDonationUrl",
+          "name": "Primary Donation URL",
+          "type": "Symbol",
+          "required": true,
+          "localized": false,
+          "helpText": "GoFundMe, PayPal, Venmo, etc. link"
+        },
+        {
+          "id": "secondaryDonationUrl",
+          "name": "Secondary Donation URL",
+          "type": "Symbol",
+          "required": false,
+          "localized": false,
+          "helpText": "Alternative payment method"
+        },
+        {
+          "id": "contactEmail",
+          "name": "Contact Email",
+          "type": "Symbol",
+          "required": false,
+          "localized": false
+        },
+        {
+          "id": "socialLinks",
+          "name": "Social Media Links (JSON)",
+          "type": "Object",
+          "required": false,
+          "localized": false,
+          "helpText": "Example: {\"facebook\": \"url\", \"instagram\": \"url\", \"twitter\": \"url\"}"
+        },
+        {
+          "id": "brandColors",
+          "name": "Brand Colors (JSON)",
+          "type": "Object",
+          "required": false,
+          "localized": false,
+          "helpText": "Example: {\"primary\": \"#FF5733\", \"secondary\": \"#33C3FF\"}"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "fundraiserUpdate",
+        "type": "ContentType"
+      },
+      "displayField": "title",
+      "name": "Fundraiser Update",
+      "description": "News and updates about the fundraiser progress",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Update Title",
+          "type": "Symbol",
+          "required": true,
+          "localized": false
+        },
+        {
+          "id": "date",
+          "name": "Date",
+          "type": "Date",
+          "required": true,
+          "localized": false
+        },
+        {
+          "id": "content",
+          "name": "Update Content",
+          "type": "Text",
+          "required": true,
+          "localized": false
+        },
+        {
+          "id": "image",
+          "name": "Update Image",
+          "type": "Link",
+          "linkType": "Asset",
+          "required": false,
+          "localized": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": ["image"]
+            }
+          ]
+        },
+        {
+          "id": "isImportant",
+          "name": "Pin to Top",
+          "type": "Boolean",
+          "required": false,
+          "localized": false,
+          "defaultValue": false
+        }
+      ]
+    }
+  ],
+  "sampleEntries": {
+    "settings": {
+      "fundraiserName": "Support [Name]'s [Event/Cause]",
+      "organizerName": "The [Family Name] Family",
+      "goalAmount": 5000,
+      "currentAmount": 1250,
+      "donorCount": 25,
+      "endDate": "2025-06-30",
+      "primaryDonationUrl": "https://gofundme.com/your-campaign",
+      "contactEmail": "contact@example.com",
+      "socialLinks": {
+        "facebook": "https://facebook.com/your-page",
+        "instagram": "https://instagram.com/your-account"
+      },
+      "brandColors": {
+        "primary": "#FF5733",
+        "secondary": "#33C3FF"
+      }
+    },
+    "hero": {
+      "sectionName": "hero",
+      "headline": "Help [Name] Achieve Their Dream",
+      "subheadline": "Every contribution brings us one step closer to making this possible",
+      "ctaText": "Donate Now",
+      "ctaUrl": "https://gofundme.com/your-campaign"
+    },
+    "story": {
+      "sectionName": "story",
+      "headline": "Our Story",
+      "description": "Share the compelling story behind your fundraiser. Why are you raising money? What impact will it have? Make it personal and heartfelt.\n\nExample: [Name] has worked incredibly hard to earn a spot on the [Team/Program]. This is a once-in-a-lifetime opportunity that will help them develop skills, build character, and create memories that last forever."
+    },
+    "goal": {
+      "sectionName": "goal",
+      "headline": "What We're Raising Money For",
+      "items": [
+        {
+          "title": "Travel Expenses",
+          "amount": 2000,
+          "description": "Flights and transportation"
+        },
+        {
+          "title": "Accommodation",
+          "amount": 1500,
+          "description": "Hotel and lodging during the trip"
+        },
+        {
+          "title": "Equipment",
+          "amount": 800,
+          "description": "Necessary gear and supplies"
+        },
+        {
+          "title": "Program Fees",
+          "amount": 700,
+          "description": "Registration and participation costs"
+        }
+      ]
+    },
+    "milestones": {
+      "sectionName": "milestones",
+      "headline": "Our Progress",
+      "items": [
+        {
+          "percentage": 25,
+          "title": "First Milestone",
+          "description": "Cover basic registration fees"
+        },
+        {
+          "percentage": 50,
+          "title": "Halfway There!",
+          "description": "Secure travel arrangements"
+        },
+        {
+          "percentage": 75,
+          "title": "Almost Done",
+          "description": "Purchase all necessary equipment"
+        },
+        {
+          "percentage": 100,
+          "title": "Goal Reached!",
+          "description": "Everything is covered!"
+        }
+      ]
+    },
+    "impact": {
+      "sectionName": "impact",
+      "headline": "How Your Donation Helps",
+      "items": [
+        {
+          "amount": "$25",
+          "impact": "Covers meals for one day"
+        },
+        {
+          "amount": "$50",
+          "impact": "Helps with equipment costs"
+        },
+        {
+          "amount": "$100",
+          "impact": "Supports transportation needs"
+        },
+        {
+          "amount": "$250+",
+          "impact": "Makes a major difference in reaching our goal"
+        }
+      ]
+    },
+    "faq": {
+      "sectionName": "faq",
+      "headline": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "How can I donate?",
+          "answer": "Click the 'Donate Now' button to be taken to our secure donation page. We accept all major payment methods."
+        },
+        {
+          "question": "Is my donation tax-deductible?",
+          "answer": "Please consult with your tax advisor regarding the deductibility of your contribution."
+        },
+        {
+          "question": "What if you raise more than your goal?",
+          "answer": "Any additional funds will go towards [specify purpose - future needs, donation to charity, etc.]."
+        },
+        {
+          "question": "How can I stay updated?",
+          "answer": "Follow us on social media or check this page regularly for updates on our progress!"
+        }
+      ]
+    }
+  }
+}
+

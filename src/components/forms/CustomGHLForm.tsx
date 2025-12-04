@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ghlClient } from '@/lib/api/ghl';
+// import { ghlClient } from '@/lib/api/ghl'; // GHL not used for fundraiser
 
 interface CustomFormProps {
   formType?: 'contact' | 'leadgen' | 'consultation';

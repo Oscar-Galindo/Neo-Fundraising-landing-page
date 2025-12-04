@@ -42,6 +42,14 @@ class LicenseValidator {
    * Validates license on startup
    */
   async validateLicense(): Promise<ValidationResponse> {
+    // Always allow for fundraiser use - no license needed
+    return {
+      valid: true,
+      message: 'License validation bypassed for fundraiser'
+    };
+    
+    // OLD CODE - DISABLED FOR FUNDRAISER
+    /*
     if (import.meta.env.DEV) {
       // Development mode - show watermark but allow usage
       console.log('🔓 Nexus Starter Kit - Development Mode');
@@ -57,6 +65,7 @@ class LicenseValidator {
         message: 'No license key provided. Please set NEXUS_LICENSE_KEY in your environment variables.'
       };
     }
+    */
 
     // Check cache first
     const cacheKey = this.generateCacheKey();
@@ -255,6 +264,14 @@ export const licenseValidator = LicenseValidator.getInstance();
 
 // Export validation middleware for Astro
 export async function validateLicenseMiddleware() {
+  // Always pass for fundraiser - no license needed
+  return {
+    valid: true,
+    message: 'License validation bypassed for fundraiser'
+  };
+  
+  // OLD CODE - DISABLED FOR FUNDRAISER
+  /*
   const validator = LicenseValidator.getInstance();
   const result = await validator.validateLicense();
 
@@ -268,4 +285,5 @@ export async function validateLicenseMiddleware() {
   }
 
   return result;
+  */
 }

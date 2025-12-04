@@ -1,5 +1,6 @@
 import { defineMiddleware } from 'astro:middleware';
-import { validateLicenseMiddleware } from './lib/license-validator';
+// License validation disabled for fundraiser use
+// import { validateLicenseMiddleware } from './lib/license-validator';
 
 export const onRequest = defineMiddleware(async (context, next) => {
   // Skip license check for static assets
@@ -8,8 +9,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
-  // Validate license on production
-  if (!import.meta.env.DEV) {
+  // License validation disabled for personal fundraiser use
+  /* if (!import.meta.env.DEV) {
     try {
       await validateLicenseMiddleware();
     } catch (error) {
@@ -90,7 +91,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
         }
       });
     }
-  }
+  } */
 
   return next();
 });
